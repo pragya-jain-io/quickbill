@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Invoice Template</title>
+    <style>
+        :root {
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-primary: #203764;
+            --color-bg-light: #f2f2f2;
+            --color-bg-alt: #f9f9f9;
+            --border-color: #000000;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: var(--color-black);
+            background-color: var(--color-white);
+            margin: 0;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .invoice-container {
+            max-width: 1152px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .invoice-table th, 
+        .invoice-table td {
+            border: 1px solid var(--border-color);
+            padding: 6px 8px;
+            font-size: 14px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        .invoice-table td {
+            height: 20px; 
+        }
+
+        .invoice-table th {
+            background-color: var(--color-bg-light);
+            text-align: center;
+        }
+
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .font-bold { font-weight: bold; }
+
+        /* Component sections */
+        .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 10px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .company-tagline {
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .company-address {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        /* Meta & Transport sub-block */
+        .invoice-meta-wrapper {
+            font-size: 13px;
+        }
+
+        .invoice-date-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .invoice-divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 4px 0;
+        }
+
+        .meta-sub-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2px;
+        }
+
+        .meta-sub-table td {
+            border: none;
+            padding: 1px 0;
+            font-size: 13px;
+        }
+
+        .meta-grid-table td {
+            border: 1px solid var(--border-color);
+            padding: 2px 4px;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        /* Background helper classes */
+        .bg-header-alt { background-color: var(--color-bg-alt); }
+        .bg-total-light { background-color: var(--color-bg-light); }
+        
+        .grand-total-amount {
+            font-size: 16px;
+            background-color: var(--color-bg-light);
+        }
+
+        .conditions-cell {
+            vertical-align: top;
+        }
+
+        .signature-cell {
+            height: 80px;
+            vertical-align: bottom;
+            position: relative;
+            text-align: center;
+        }
+
+        .signature-image {
+            width: 75px;
+            height: 62px;
+            display: block;
+            margin: 0 auto 5px auto;
+        }
+
+        .signature-subtitle {
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-container">
+    <table class="invoice-table">
+        <!-- Header -->
+        <tr>
+            <td colspan="18" class="invoice-title">TAX INVOICE</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="font-bold">GST</td>
+            <td colspan="4">{/* {company.gst} */}07AAAAA0000A1Z5</td>
+            <td><strong>PH</strong></td>
+            <td colspan="3">{/* {company.phone} */}+91 98765 43210</td>
+            <td colspan="2" class="font-bold">INV NO</td>
+            <td colspan="6" class="text-center font-bold">{/* {invoice.invoiceNo} */}INV-001</td>
+        </tr>
+        <tr>
+            <td colspan="10" class="font-bold company-name">
+                {/* {company.name} */}COMPANY NAME / TRADER NAME<br>
+                <span class="company-tagline">{/* {company.tagline} */}MANUFACTURER & TRADING OF HARDWARE & INDUSTRIAL GOODS</span><br>
+                <span class="company-address">{/* {company.address} */}123 Business Park, Main Road, City - 110001</span>
+            </td>
+            <td colspan="8">
+                <div class="invoice-meta-wrapper">
+                    <div class="invoice-date-row">
+                        <strong>DATE:</strong>
+                        <span>{/* {invoice.date} */}26 / 10 / 2026</span>
+                    </div>
+                    <hr class="invoice-divider">
+                    <table class="meta-sub-table">
+                        <tr>
+                            <td><strong>GR No.:</strong></td>
+                            <td>{/* {invoice.grNo} */}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vehicle No.:</strong></td>
+                            <td>{/* {invoice.vehicleNo} */}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transport:</strong></td>
+                            <td>{/* {invoice.transport} */}Goods Transport</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Place:</strong></td>
+                            <td>{/* {invoice.place} */}CITY</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Code:</strong></td>
+                            <td>{/* {invoice.stateCode} */}07</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Eway No.:</strong></td>
+                            <td>{/* {invoice.ewayNo} */}10</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marka:</strong></td>
+                            <td>{/* {invoice.marka} */}No Need</td>
+                        </tr>
+                    </table>
+                    
+                </div>
+            </td>
+        </tr>
+
+        <!-- Buyer Details -->
+        <tr>
+            <td colspan="2" class="font-bold">NAME</td>
+            <td colspan="10">{/* {client.name} */}SAMPLE CLIENT PVT LTD</td>
+            <td><strong>PH</strong></td>
+            <td colspan="5">{/* {client.phone} */}+91 91234 56789</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="font-bold">ADDRESS</td>
+            <td colspan="16">{/* {client.address} */}Plot No. 45, Sector 10, Industrial Area, City - 110002</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="font-bold">GST NO.</td>
+            <td colspan="16">{/* {client.gst} */}07BBBBA0000B1Z2</td>
+        </tr>
+
+        <!-- Item Table Headers -->
+        <tr class="bg-header-alt">
+            <td rowspan="2" class="text-center font-bold">S.NO.</td>
+            <td colspan="4" rowspan="2" class="text-center font-bold">PARTICULAR</td>
+            <td rowspan="2" class="text-center font-bold">HSN CODE</td>
+            <td colspan="2" rowspan="2" class="text-center font-bold">QUANTITY</td>
+            <td rowspan="2" class="text-center font-bold">RATE (Rs)</td>
+            <td colspan="2" rowspan="2" class="text-center font-bold">TAXABLE AMOUNT</td>
+            <td rowspan="2" class="text-center font-bold">GST %</td>
+            <td colspan="3" rowspan="2" class="text-center font-bold">GST AMOUNT</td>
+            <td colspan="3" class="text-center font-bold">TOTAL AMOUNT</td>
+        </tr>
+        <tr class="bg-header-alt">
+            <td colspan="3" class="text-center font-bold">RS / P</td>
+        </tr>
+
+        <!-- Item Rows (In React, replace with items.map()) -->
+        <tr>
+            <td class="text-center">1</td>
+            <td colspan="4">ITEM DESCRIPTION 1</td>
+            <td class="text-center">7318</td>
+            <td class="text-right">100</td>
+            <td>KG</td>
+            <td class="text-right">100.00</td>
+            <td colspan="2" class="text-right">10,000.00</td>
+            <td class="text-center">18</td>
+            <td colspan="3" class="text-right">1,800.00</td>
+            <td colspan="3" class="text-right font-bold">11,800.00</td>
+        </tr>
+        <tr>
+            <td class="text-center">2</td>
+            <td colspan="4">ITEM DESCRIPTION 2</td>
+            <td class="text-center">7318</td>
+            <td class="text-right">50</td>
+            <td>KG</td>
+            <td class="text-right">200.00</td>
+            <td colspan="2" class="text-right">10,000.00</td>
+            <td class="text-center">18</td>
+            <td colspan="3" class="text-right">1,800.00</td>
+            <td colspan="3" class="text-right font-bold">11,800.00</td>
+        </tr>
+        
+        <!-- Empty padding rows to maintain fixed invoice height -->
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+        <tr>
+            <td class="text-center"></td>
+            <td colspan="4"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+            <td></td>
+            <td class="text-right"></td>
+            <td colspan="2" class="text-right"></td>
+            <td class="text-center"></td>
+            <td colspan="3" class="text-right"></td>
+            <td colspan="3" class="text-right font-bold"></td>
+        </tr>
+
+<!-- Totals & Bank Info -->
+        <tr>
+            <td colspan="10" class="font-bold">BANK: {/* {bank.name} */}SAMPLE BANK NAME (MAIN BRANCH CITY-110001)</td>
+            <td colspan="4"><strong>TAXABLE AMOUNT</strong></td>
+            <td colspan="4" class="text-right font-bold">{/* {totals.taxableAmount} */}20,000.00</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="font-bold">A/C No</td>
+            <td colspan="8">{/* {bank.accountNo} */}0000000000000000</td>
+            
+            <td colspan="4"><strong>CGST (9%)</strong></td>
+            <td colspan="4" class="text-right">{/* {totals.cgst} */}1,800.00</td>
+        </tr>
+         <tr>
+            <td colspan="2" class="font-bold">IFSC Code</td>
+            <td colspan="8">{/* {bank.ifsc} */}SBIN0000000</td>
+            <td colspan="4"><strong>SGST (9%)</strong></td>
+            <td colspan="4" class="text-right">{/* {totals.sgst} */}1,800.00</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="font-bold">UPID</td>
+            <td colspan="8">{/* {bank.upi} */}company@upi</td>
+            <td colspan="4"><strong>IGST (18%)</strong></td>
+            <td colspan="4" class="text-right">{/* {totals.igst} */}00.00</td>
+        </tr>
+        
+        <tr>
+            <td colspan="2" class="font-bold">RS. IN WORDS</td>
+            <td colspan="8" class="font-bold">{/* {totals.inWords} */}TWENTY THREE THOUSAND SIX HUNDRED ONLY</td>
+            <td colspan="4"><strong>CARTAGE & PACKING</strong></td>
+            <td colspan="4" class="text-right">{/* {totals.cartage} */}-</td>
+        </tr>
+        <tr>
+            <td colspan="10" rowspan="2" class="conditions-cell">
+                <strong>CONDITIONS ON SALE:</strong><br>
+                1. All disputes are subjected to Local Jurisdiction<br>
+                2. Interest @ 24% per annum will be charged if unpaid within 30 days<br>
+                3. Goods once sold will not be taken back
+            </td>
+            <td colspan="4" class="font-bold bg-total-light">GRAND TOTAL</td>
+            <td colspan="4" class="text-right font-bold grand-total-amount">{/* {totals.grandTotal} */}23,600.00</td>
+        </tr>
+        <tr>
+            <td colspan="8" class="signature-cell">
+                <img src="signature.png" alt="Signature" class="signature-image">
+                <strong>{/* {company.name} */}COMPANY NAME / TRADER NAME</strong><br>
+                <span class="signature-subtitle">AUTHORISED SIGNATORY</span>
+            </td>
+        </tr>
+       
+    </table>
+</div>
+
+</body>
+</html>
