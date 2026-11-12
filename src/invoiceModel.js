@@ -30,7 +30,7 @@ export const initialInvoice = {
 
   // Transaction Tax Mode: 'LOCAL' (CGST + SGST) or 'INTERSTATE' (IGST)
   // Mutually exclusive: true means IGST applies, false means CGST + SGST apply
-  isInterState: false, 
+  isInterState: true, 
 
   seller: {
     name: "COMPANY NAME / TRADER NAME",
@@ -58,14 +58,14 @@ export const initialInvoice = {
   },
 
   transportDetails: {
-    grNo: "",
-    vehicleNo: "",
+    grNo: "BOND-009",
+    vehicleNo: "DL-01-AB-1234",
     transport: "Goods Transport",
     place: "CITY",
     stateCode: "07",
     ewayNo: "10",
     marka: "EXEMPTED",
-    rce: "202000",
+    
   },
 
   items: [
@@ -84,7 +84,7 @@ export const initialInvoice = {
       hsnCode: "2542",
       quantity: 50,
       unit: "KG",
-      unitPriceRupee: 200.00,
+      unitPriceRupee: 20000.00,
       gstRate: 18, // 18% Total GST
     },
   ],

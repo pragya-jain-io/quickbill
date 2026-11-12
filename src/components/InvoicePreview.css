@@ -1,0 +1,170 @@
+:root {
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-primary: #203764;
+    --color-bg-light: #f2f2f2;
+    --color-bg-alt: #f9f9f9;
+    --border-color: #000000;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--color-black);
+    background-color: var(--color-white);
+    margin: 0;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.invoice-container {
+    max-width: 1152px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.invoice-table th,
+.invoice-table td {
+    border: 1px solid var(--border-color);
+    padding: 6px 8px;
+    font-size: 14px;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+.invoice-table td {
+    height: 20px;
+}
+
+.invoice-table th {
+    background-color: var(--color-bg-light);
+    text-align: left;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/* Component sections */
+.invoice-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 10px;
+}
+
+.company-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.company-tagline {
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.company-address {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+/* Meta & Transport sub-block */
+.invoice-meta-wrapper {
+    font-size: 13px;
+}
+
+.invoice-date-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.invoice-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 4px 0;
+}
+
+.meta-sub-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2px;
+}
+
+.meta-sub-table td {
+    border: none;
+    padding: 1px 0;
+    font-size: 13px;
+}
+
+.meta-grid-table td {
+    border: 1px solid var(--border-color);
+    padding: 2px 4px;
+    font-size: 13px;
+    text-align: left;
+}
+
+/* Background helper classes */
+.bg-header-alt {
+    background-color: var(--color-bg-alt);
+}
+
+.bg-total-light {
+    background-color: var(--color-bg-light);
+}
+
+.grand-total-amount {
+    font-size: 16px;
+    background-color: var(--color-bg-light);
+}
+
+.conditions-cell {
+    vertical-align: top;
+}
+
+.signature-cell {
+    height: 80px;
+    vertical-align: bottom;
+    position: relative;
+    text-align: center;
+}
+
+.signature-image {
+    width: 75px;
+    height: 62px;
+    display: block;
+    margin: 0 auto 5px auto;
+}
+
+.signature-subtitle {
+    font-size: 12px;
+}

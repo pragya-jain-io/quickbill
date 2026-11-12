@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { initialInvoice, computeInvoiceTotals } from './invoiceModel.js'
+import InvoicePreview from './components/InvoicePreview.jsx'
+import './components/InvoicePreview.css'
 import './App.css'
 
 function App() {
@@ -80,88 +82,13 @@ function App() {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(Number(amount))
-
-  return (
-    <main>
-      <h1>Invoice</h1>
-
-      <label>Customer Name</label>
-      <input
-        value={invoice.customer.name}
-        onChange={(event) => updateCustomerName(event.target.value)}
-      />
-
-      <p>Seller: {invoice.seller.name}</p>
-
-      <h2>Items</h2>
-
-      {invoice.items.map(item => (
-  <div key={item.id}>
-    <input
-      placeholder="Description"
-      value={item.description}
-      onChange={event =>
-        updateItem(item.id, 'description', event.target.value)
-      }
-    />
-
-    <input
-      placeholder="HSN Code"
-      value={item.hsnCode}
-      onChange={event =>
-        updateItem(item.id, 'hsnCode', event.target.value)
-      }
-    />
-
-    <input
-      type="number"
-      placeholder="Quantity"
-      value={item.quantity}
-      onChange={event =>
-        updateItem(item.id, 'quantity', event.target.value)
-      }
-    />
-
-    <input
-      placeholder="Unit"
-      value={item.unit}
-      onChange={event =>
-        updateItem(item.id, 'unit', event.target.value)
-      }
-    />
-
-    <input
-      type="number"
-      placeholder="Rate"
-      value={item.unitPriceRupee}
-      onChange={event =>
-        updateItem(item.id, 'unitPriceRupee', event.target.value)
-      }
-    />
-
-    <input
-      type="number"
-      placeholder="GST %"
-      value={item.gstRate}
-      onChange={event =>
-        updateItem(item.id, 'gstRate', event.target.value)
-      }
-    />
-
-    <button onClick={() => removeItem(item.id)}>
-      Remove
-    </button>
-  </div>
-))}
-
-<button onClick={addItem}>
-  Add Item
-</button>
-
-      <h2>Invoice Total</h2>
-      <p>{formatINR(totals.grandTotal)}</p>
-    </main>
-  )
+return (
+    <div className="app-container">
+      {/* You can render controls or the preview here */}
+      <InvoicePreview invoice={invoice} totals={totals} />
+    </div>
+  );
+ 
 }
 
 export default App
