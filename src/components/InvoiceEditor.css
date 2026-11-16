@@ -1,0 +1,167 @@
+
+.invoice-editor {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.invoice-editor h2 {
+  margin: 0 0 20px;
+  color: #203764;
+}
+
+.editor-section {
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
+
+/* Read-only fields */
+.editor-field input:read-only {
+  background: #f0f1f3;
+  color: #555;
+  cursor: default;
+  border-color: #ddd;
+}
+
+.readonly-condition {
+  margin: 0;
+  padding: 10px;
+  background: #f5f6f8;
+  border-radius: 4px;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+.editor-section h3 {
+  margin: 0 0 18px;
+  color: #203764;
+  font-size: 17px;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.editor-field input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.editor-field input:focus,
+.condition-row input:focus {
+  outline: none;
+  border-color: #203764;
+  box-shadow: 0 0 0 2px rgba(32, 55, 100, 0.12);
+}
+
+.checkbox-field {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkbox-field input {
+  width: 18px;
+  height: 18px;
+}
+
+.items-editor,
+.conditions-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item-editor-card {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.item-editor-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #203764;
+}
+
+.add-button,
+.remove-button {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-button {
+  align-self: flex-start;
+  background: #203764;
+  color: white;
+}
+
+.remove-button {
+  background: #fbeaea;
+  color: #a32121;
+}
+
+.condition-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.condition-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  .invoice-editor {
+    padding: 12px;
+  }
+
+  .editor-section {
+    padding: 14px;
+  }
+
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .condition-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

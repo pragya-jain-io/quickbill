@@ -1,20 +1,23 @@
+import './InvoicePreview.css';
 
+// WHAT: Formats numbers into Indian currency style (e.g., 1,00,000.00).
+// WHY: Indian accounting uses lakh/crore comma placement ('en-IN') and always displays 2 decimal places for paise.
 const formatAmount = (value) => {
   if (value === '-' || value === null || value === undefined || value === '') {
     return value === '-' ? '-' : '0.00';
   }
 
   return new Intl.NumberFormat('en-IN', {
-    
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(Number(value) || 0);
 };
 
+// WHAT: Converts HTML date format (YYYY-MM-DD) into Indian invoice format (DD / MM / YYYY).
+// WHY: <input type="date"> requires YYYY-MM-DD, but Indian business invoices display DD/MM/YYYY.
 const formatDate = (date) => {
   if (!date) return '-';
 
-  // Convert YYYY-MM-DD to DD / MM / YYYY
   const match = String(date).match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
   if (match) {
@@ -24,12 +27,15 @@ const formatDate = (date) => {
   return date;
 };
 
+// WHAT: Pure presentational component that renders the printable tax invoice table.
+// WHY: Keeps UI rendering completely separate from business logic and state management.
 export default function InvoicePreview({ invoice, totals }) {
+  // WHAT: Safely extract nested objects with fallback empty objects (`?? {}`).
+  // WHY: Defensive programming — prevents app crashes if any section of `invoice` is temporarily undefined.
   const company = invoice?.seller ?? {};
   const client = invoice?.customer ?? {};
   const bank = invoice?.bank ?? {};
   const transport = invoice?.transportDetails ?? {};
-
   const items = invoice?.items ?? [];
 
   const safeTotals = totals ?? {
@@ -42,6 +48,8 @@ export default function InvoicePreview({ invoice, totals }) {
     grandTotal: 0
   };
 
+  // WHAT: Combines address lines cleanly with a comma.
+  // WHY: `.filter(Boolean)` removes empty strings so we don't accidentally render a trailing ", " if Line 2 is blank.
   const customerAddress = [
     client.addressLine1,
     client.addressLine2
@@ -52,11 +60,13 @@ export default function InvoicePreview({ invoice, totals }) {
     company.addressLine2
   ].filter(Boolean).join(', ');
 
-  // Keep eight item rows to match the original HTML template.
-  const emptyRows = Math.max(0, 8 - items.length);
+  // WHAT: Calculates how many blank filler rows are needed to reach 10 rows total.
+  // WHY: Keeps the printed A4 invoice layout at a consistent height even when there are only 1 or 2 items.
+  const emptyRows = Math.max(0, 10 - items.length);
 
   return (
     <div className="invoice-container">
+      {/* Uses an HTML <table> with colSpan/rowSpan to match traditional Indian GST tax invoice grid layouts */}
       <table className="invoice-table">
         <tbody>
 
@@ -85,13 +95,10 @@ export default function InvoicePreview({ invoice, totals }) {
             <td colSpan={10} className="font-bold company-name">
               {company.name || '-'}
               <br />
-
               <span className="company-tagline">
                 {company.tagline || ''}
               </span>
-
               <br />
-
               <span className="company-address">
                 {sellerAddress}
               </span>
@@ -99,7 +106,6 @@ export default function InvoicePreview({ invoice, totals }) {
 
             <td colSpan={8}>
               <div className="invoice-meta-wrapper">
-
                 <div className="invoice-date-row">
                   <strong>DATE:</strong>
                   <span>{formatDate(invoice?.date)}</span>
@@ -113,32 +119,26 @@ export default function InvoicePreview({ invoice, totals }) {
                       <td><strong>GR No.:</strong></td>
                       <td>{transport.grNo || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>Vehicle No.:</strong></td>
                       <td>{transport.vehicleNo || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>Transport:</strong></td>
                       <td>{transport.transport || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>Place:</strong></td>
                       <td>{transport.place || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>State Code:</strong></td>
                       <td>{transport.stateCode || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>Eway No.:</strong></td>
                       <td>{transport.ewayNo || '-'}</td>
                     </tr>
-
                     <tr>
                       <td><strong>Marka:</strong></td>
                       <td>{transport.marka || '-'}</td>
@@ -179,92 +179,41 @@ export default function InvoicePreview({ invoice, totals }) {
           {/* Item Table Headers */}
           <tr className="bg-header-alt">
             <td rowSpan={2} className="text-center font-bold">S.NO.</td>
-
-            <td colSpan={4} rowSpan={2} className="text-center font-bold">
-              PARTICULAR
-            </td>
-
-            <td rowSpan={2} className="text-center font-bold">
-              HSN CODE
-            </td>
-
-            <td colSpan={2} rowSpan={2} className="text-center font-bold">
-              QUANTITY
-            </td>
-
-            <td rowSpan={2} className="text-center font-bold">
-              RATE (₹)
-            </td>
-
-            <td colSpan={2} rowSpan={2} className="text-center font-bold">
-              TAXABLE AMOUNT (₹)
-            </td>
-
-            <td rowSpan={2} className="text-center font-bold">
-              GST %
-            </td>
-
-            <td colSpan={3} rowSpan={2} className="text-center font-bold">
-              GST AMOUNT(₹)
-            </td>
-
-            <td colSpan={3} className="text-center font-bold">
-              TOTAL AMOUNT
-            </td>
+            <td colSpan={4} rowSpan={2} className="text-center font-bold">PARTICULAR</td>
+            <td rowSpan={2} className="text-center font-bold">HSN CODE</td>
+            <td colSpan={2} rowSpan={2} className="text-center font-bold">QUANTITY</td>
+            <td rowSpan={2} className="text-center font-bold">RATE (₹)</td>
+            <td colSpan={2} rowSpan={2} className="text-center font-bold">TAXABLE AMOUNT (₹)</td>
+            <td rowSpan={2} className="text-center font-bold">GST %</td>
+            <td colSpan={3} rowSpan={2} className="text-center font-bold">GST AMOUNT (₹)</td>
+            <td colSpan={3} className="text-center font-bold">TOTAL AMOUNT</td>
           </tr>
 
           <tr className="bg-header-alt">
-            <td colSpan={3} className="text-center font-bold">
-              ₹ / p
-            </td>
+            <td colSpan={3} className="text-center font-bold">₹ / p</td>
           </tr>
 
-          {/* Dynamic Item Rows */}
+          {/* Dynamic Item Rows: Matches each raw item with its computed totals by index */}
           {items.map((item, index) => {
             const calculatedItem = safeTotals.items?.[index] ?? {};
 
             return (
               <tr key={item.id}>
                 <td className="text-center">{index + 1}</td>
-
-                <td colSpan={4}>
-                  {item.description || '-'}
-                </td>
-
-                <td className="text-center">
-                  {item.hsnCode || '-'}
-                </td>
-
-                <td className="text-right">
-                  {item.quantity ?? ''}
-                </td>
-
+                <td colSpan={4}>{item.description || '-'}</td>
+                <td className="text-center">{item.hsnCode || '-'}</td>
+                <td className="text-right">{item.quantity ?? ''}</td>
                 <td>{item.unit || '-'}</td>
-
-                <td className="text-right">
-                  {formatAmount(item.unitPriceRupee)}
-                </td>
-
-                <td colSpan={2} className="text-right">
-                  {formatAmount(calculatedItem.taxableAmount)}
-                </td>
-
-                <td className="text-center">
-                  {item.gstRate ?? 0}
-                </td>
-
-                <td colSpan={3} className="text-right">
-                  {formatAmount(calculatedItem.gstAmount)}
-                </td>
-
-                <td colSpan={3} className="text-right font-bold">
-                  {formatAmount(calculatedItem.totalAmount)}
-                </td>
+                <td className="text-right">{formatAmount(item.unitPriceRupee)}</td>
+                <td colSpan={2} className="text-right">{formatAmount(calculatedItem.taxableAmount)}</td>
+                <td className="text-center">{item.gstRate ?? 0}</td>
+                <td colSpan={3} className="text-right">{formatAmount(calculatedItem.gstAmount)}</td>
+                <td colSpan={3} className="text-right font-bold">{formatAmount(calculatedItem.totalAmount)}</td>
               </tr>
             );
           })}
 
-          {/* Empty Rows for Fixed Invoice Height */}
+          {/* Empty Filler Rows: Renders blank cells so the invoice table never shrinks */}
           {Array.from({ length: emptyRows }).map((_, index) => (
             <tr key={`empty-${index}`}>
               <td className="text-center"></td>
@@ -286,66 +235,36 @@ export default function InvoicePreview({ invoice, totals }) {
               BANK: {bank.name || '-'}
               {bank.branch ? ` (${bank.branch})` : ''}
             </td>
-
-            <td colSpan={4}>
-              <strong>TAXABLE AMOUNT (₹)</strong>
-            </td>
-
-            <td colSpan={4} className="text-right font-bold">
-              {formatAmount(safeTotals.taxableAmount)}
-            </td>
+            <td colSpan={4}><strong>TAXABLE AMOUNT (₹)</strong></td>
+            <td colSpan={4} className="text-right font-bold">{formatAmount(safeTotals.taxableAmount)}</td>
           </tr>
 
           <tr>
             <td colSpan={2} className="text-left font-bold">A/C No</td>
-            <td colSpan={8} className="text-left">
-              {bank.accountNo || '-'}
-            </td>
-
+            <td colSpan={8} className="text-left">{bank.accountNo || '-'}</td>
             <td colSpan={4}><strong>CGST 9% (₹)</strong></td>
-            <td colSpan={4} className="text-right">
-              {formatAmount(safeTotals.cgst)}
-            </td>
+            <td colSpan={4} className="text-right">{formatAmount(safeTotals.cgst)}</td>
           </tr>
 
           <tr>
             <td colSpan={2} className="text-left font-bold">IFSC Code</td>
-            <td colSpan={8} className="text-left">
-              {bank.ifsc || '-'}
-            </td>
-
+            <td colSpan={8} className="text-left">{bank.ifsc || '-'}</td>
             <td colSpan={4}><strong>SGST 9% (₹)</strong></td>
-            <td colSpan={4} className="text-right">
-              {formatAmount(safeTotals.sgst)}
-            </td>
+            <td colSpan={4} className="text-right">{formatAmount(safeTotals.sgst)}</td>
           </tr>
 
           <tr>
             <td colSpan={2} className="text-left font-bold">UPI ID</td>
-            <td colSpan={8} className="text-left">
-              {bank.upi || '-'}
-            </td>
-
+            <td colSpan={8} className="text-left">{bank.upi || '-'}</td>
             <td colSpan={4}><strong>IGST 18% (₹)</strong></td>
-            <td colSpan={4} className="text-right">
-              {formatAmount(safeTotals.igst)}
-            </td>
+            <td colSpan={4} className="text-right">{formatAmount(safeTotals.igst)}</td>
           </tr>
 
           <tr>
             <td colSpan={2} className="text-left font-bold">₹ IN WORDS</td>
-
-            <td colSpan={8} className="text-left font-bold">
-              {safeTotals.inWords || '-'}
-            </td>
-
-            <td colSpan={4}>
-              <strong>CARTAGE &amp; PACKING (₹)</strong>
-            </td>
-
-            <td colSpan={4} className="text-right">
-              {formatAmount(safeTotals.cartage)}
-            </td>
+            <td colSpan={8} className="text-left font-bold">{safeTotals.inWords || '-'}</td>
+            <td colSpan={4}><strong>CARTAGE &amp; PACKING (₹)</strong></td>
+            <td colSpan={4} className="text-right">{formatAmount(safeTotals.cartage)}</td>
           </tr>
 
           {/* Conditions and Grand Total */}
@@ -353,7 +272,6 @@ export default function InvoicePreview({ invoice, totals }) {
             <td colSpan={10} rowSpan={2} className="text-left conditions-cell">
               <strong>CONDITIONS ON SALE:</strong>
               <br />
-
               {(invoice?.conditions ?? []).map((condition, index) => (
                 <span key={index}>
                   {condition}
@@ -362,10 +280,7 @@ export default function InvoicePreview({ invoice, totals }) {
               ))}
             </td>
 
-            <td colSpan={4} className="font-bold bg-total-light">
-              GRAND TOTAL
-            </td>
-
+            <td colSpan={4} className="font-bold bg-total-light">GRAND TOTAL</td>
             <td colSpan={4} className="text-right font-bold grand-total-amount">
               ₹{formatAmount(safeTotals.grandTotal)}
             </td>
@@ -379,13 +294,9 @@ export default function InvoicePreview({ invoice, totals }) {
                 alt="Authorized signature"
                 className="signature-image"
               />
-
               <strong>{company.name || '-'}</strong>
               <br />
-
-              <span className="signature-subtitle">
-                AUTHORISED SIGNATORY
-              </span>
+              <span className="signature-subtitle">AUTHORISED SIGNATORY</span>
             </td>
           </tr>
 
