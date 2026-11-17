@@ -1,136 +1,207 @@
+:root {
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-primary: #203764;
+  --color-primary-hover: #182a4d;
+  --color-bg-light: #f2f2f2;
+  --color-bg-alt: #f9f9f9;
+  --border-color: #000000;
+  --border-subtle: #cccccc;
+  --color-danger-bg: #fbeaea;
+  --color-danger-text: #a32121;
+}
 
 .invoice-editor {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 0 auto 28px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--color-white);
+  color: var(--color-black);
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
 .invoice-editor h2 {
-  margin: 0 0 20px;
-  color: #203764;
+  margin: 0 0 16px;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
 }
 
 .editor-section {
-  margin-bottom: 24px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: white;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  background-color: var(--color-white);
 }
 
-/* Read-only fields */
-.editor-field input:read-only {
-  background: #f0f1f3;
-  color: #555;
-  cursor: default;
-  border-color: #ddd;
+.editor-section:last-child {
+  margin-bottom: 0;
 }
 
-.readonly-condition {
-  margin: 0;
-  padding: 10px;
-  background: #f5f6f8;
-  border-radius: 4px;
-  color: #444;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-
+/* Matches table header rows (.bg-header-alt) in InvoicePreview.css */
 .editor-section h3 {
-  margin: 0 0 18px;
-  color: #203764;
-  font-size: 17px;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background-color: var(--color-bg-light);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .editor-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 14px 16px;
+  padding: 14px;
 }
 
 .editor-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 5px;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-black);
 }
 
 .editor-field input {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
   font: inherit;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--color-black);
+  background-color: var(--color-white);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .editor-field input:focus,
 .condition-row input:focus {
   outline: none;
-  border-color: #203764;
-  box-shadow: 0 0 0 2px rgba(32, 55, 100, 0.12);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(32, 55, 100, 0.15);
+}
+
+/* Read-only fields blend subtly with --color-bg-alt */
+.editor-field input:read-only {
+  background-color: var(--color-bg-alt);
+  color: #555555;
+  border-color: #dcdcdc;
+  cursor: default;
+}
+
+.editor-field input:read-only:focus {
+  border-color: #dcdcdc;
+  box-shadow: none;
 }
 
 .checkbox-field {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 8px 10px;
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  align-self: end;
 }
 
 .checkbox-field input {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
 }
 
 .items-editor,
 .conditions-editor {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  padding: 14px;
 }
 
 .item-editor-card {
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
+  border: 1px solid var(--border-color);
+  background-color: var(--color-bg-alt);
 }
 
 .item-editor-heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  color: #203764;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--color-primary);
+  background-color: var(--color-bg-light);
+  border-bottom: 1px solid var(--border-color);
 }
 
+.item-editor-card .editor-grid {
+  background-color: var(--color-white);
+}
+
+.readonly-condition {
+  margin: 0;
+  padding: 8px 10px;
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  color: var(--color-black);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Buttons */
 .add-button,
 .remove-button {
-  border: none;
-  border-radius: 5px;
-  padding: 10px 14px;
+  border-radius: 2px;
   cursor: pointer;
-  font-weight: 600;
+  font-family: inherit;
+  font-weight: bold;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .add-button {
   align-self: flex-start;
-  background: #203764;
-  color: white;
+  padding: 8px 14px;
+  font-size: 13px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: 1px solid var(--border-color);
+}
+
+.add-button:hover {
+  background-color: var(--color-primary-hover);
 }
 
 .remove-button {
-  background: #fbeaea;
-  color: #a32121;
+  padding: 4px 10px;
+  font-size: 12px;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
+  border: 1px solid var(--color-danger-text);
+}
+
+.remove-button:hover {
+  background-color: var(--color-danger-text);
+  color: var(--color-white);
 }
 
 .condition-row {
@@ -142,18 +213,22 @@
 .condition-row input {
   flex: 1;
   min-width: 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 13px;
 }
 
 @media (max-width: 600px) {
   .invoice-editor {
-    padding: 12px;
+    padding: 8px;
   }
 
-  .editor-section {
-    padding: 14px;
+  .editor-grid,
+  .items-editor,
+  .conditions-editor {
+    padding: 10px;
   }
 
   .editor-grid {

@@ -4,7 +4,11 @@
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  background: #f3f4f6;
+  background: #ffffff;
+
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .editor-page,
@@ -14,8 +18,11 @@
 
 .page-navigation {
   display: flex;
-  justify-content: center;
-  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
+  box-sizing: border-box;
 }
 
 .navigation-button {
@@ -44,5 +51,77 @@
 @media (max-width: 600px) {
   .app-container {
     padding: 8px;
+  }
+}
+
+
+/* PDF / Print styling */
+
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .app-container {
+    width: 100%;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+  }
+
+  /* Hide navigation buttons in the PDF */
+  .page-navigation {
+    display: none !important;
+  }
+
+  /* Scale to 65% and keep on 1 page */
+  .invoice-container {
+    zoom: 0.65;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+    overflow: visible !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Fallback for Firefox (which ignores zoom in print) */
+  @-moz-document url-prefix() {
+    .invoice-container {
+      zoom: 1;
+      transform: scale(0.65);
+      transform-origin: top left;
+      width: 153.85% !important; /* 100% / 0.65 to fill page width */
+    }
+  }
+
+  .invoice-table {
+    width: 100% !important;
+  }
+
+  /* Avoid splitting individual invoice rows */
+  .invoice-table tr,
+  .invoice-table td {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Preserve table backgrounds and borders */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

@@ -1,46 +1,48 @@
+
 import { useState } from 'react';
+
 import {
   initialInvoice,
   computeInvoiceTotals,
   createEmptyItem,
 } from './InvoiceModel.js';
+
 import {
   NUMERIC_ITEM_FIELDS,
   NUMERIC_ROOT_FIELDS,
 } from './InvoiceConfig.js';
+
 import InvoiceEditor from './components/InvoiceEditor';
 import InvoicePreview from './components/InvoicePreview';
 
+import './App.css';
+
 function App() {
-  // WHAT: Holds the single source of truth for the entire invoice data.
-  // WHY: "Lifting state up" to App allows both the Editor (left) and Preview (right) to stay in sync automatically.
+  // Invoice data remains in App so it survives page switching.
   const [invoice, setInvoice] = useState(initialInvoice);
 
-  // WHAT: Calculates all tax, item, and grand totals on every render.
-  // WHY: Derived state! We don't store totals in useState because they can be calculated directly from `invoice`, avoiding sync bugs.
+  // Controls which page is currently visible.
+  const [currentPage, setCurrentPage] = useState('editor');
+
+  // Calculate totals from the current invoice data.
   const totals = computeInvoiceTotals(invoice);
 
-  // WHAT: Safely converts string input from HTML forms into actual JavaScript numbers.
-  // WHY: HTML <input> always returns strings (e.g., "100"). Without this, "100" + "50" would become "10050" instead of 150.
+  // Convert numeric input values safely.
   const convertNumericValue = (field, value, numericFields) => {
-    // If this field isn't supposed to be a number (like customer name), return as-is.
     if (!numericFields.includes(field)) {
       return value;
     }
 
-    // Allow empty string so the user can clear the input box completely while typing.
     if (value === '') {
       return '';
     }
 
     const number = Number(value);
 
-    // Return the valid number, or empty string if the user typed invalid characters.
     return Number.isFinite(number) ? number : '';
   };
 
-  // WHAT: Appends a new blank item row to the invoice.
-  // WHY: Uses functional state update (`previous => ...`) and spread syntax to keep React state immutable.
+  // Add a new invoice item.
   const handleAddItem = () => {
     setInvoice(previous => ({
       ...previous,
@@ -48,8 +50,7 @@ function App() {
     }));
   };
 
-  // WHAT: Deletes a specific item row using its unique ID.
-  // WHY: `.filter()` creates a brand-new array without mutating the existing state array.
+  // Remove an invoice item.
   const handleRemoveItem = (itemId) => {
     setInvoice(previous => ({
       ...previous,
@@ -57,8 +58,7 @@ function App() {
     }));
   };
 
-  // WHAT: Updates a single field (like quantity or price) inside a specific item object.
-  // WHY: `.map()` creates a new array, updating only the matching item while leaving other items untouched.
+  // Update an invoice item field.
   const handleItemChange = (itemId, field, value) => {
     const updatedValue = convertNumericValue(
       field,
@@ -70,14 +70,13 @@ function App() {
       ...previous,
       items: previous.items.map(item =>
         item.id === itemId
-          ? { ...item, [field]: updatedValue } // Computed property name `[field]` updates just that key
+          ? { ...item, [field]: updatedValue }
           : item
       ),
     }));
   };
 
-  // WHAT: Updates top-level fields (like date) or nested sections (like seller/customer).
-  // WHY: One single reusable handler avoids writing dozens of separate onChange functions for every input.
+  // Update root-level or nested invoice fields.
   const handleFieldChange = (section, field, value) => {
     const updatedValue =
       section === 'root'
@@ -85,7 +84,6 @@ function App() {
         : value;
 
     setInvoice(previous => {
-      // Case 1: Field lives directly on the main invoice object (e.g., invoiceNumber, date)
       if (section === 'root') {
         return {
           ...previous,
@@ -93,8 +91,6 @@ function App() {
         };
       }
 
-      // Case 2: Field lives inside a nested object (e.g., customer.name, bank.ifsc)
-      // Must spread both the outer object AND the nested section object to preserve immutability.
       return {
         ...previous,
         [section]: {
@@ -107,20 +103,63 @@ function App() {
 
   return (
     <main className="app-container">
-      {/* Left side: Form inputs + callback functions to update state */}
-      <InvoiceEditor
-        invoice={invoice}
-        onFieldChange={handleFieldChange}
-        onItemChange={handleItemChange}
-        onAddItem={handleAddItem}
-        onRemoveItem={handleRemoveItem}
-      />
 
-      {/* Right side: Read-only live print layout receiving data and calculated totals */}
-      <InvoicePreview
-        invoice={invoice}
-        totals={totals}
-      />
+      {currentPage === 'editor' && (
+        <div className="editor-page">
+
+          <InvoiceEditor
+            invoice={invoice}
+            onFieldChange={handleFieldChange}
+            onItemChange={handleItemChange}
+            onAddItem={handleAddItem}
+            onRemoveItem={handleRemoveItem}
+          />
+
+          <div className="page-navigation">
+            <span></span>
+            <button
+              type="button"
+              className="navigation-button"
+              onClick={() => setCurrentPage('preview')}
+            >
+              →
+            </button>
+          </div>
+
+        </div>
+      )}
+
+      {currentPage === 'preview' && (
+        <div className="preview-page">
+
+          <div className="page-navigation">
+            <button
+              type="button"
+              className="navigation-button secondary"
+              onClick={() => setCurrentPage('editor')}
+            >
+              ←
+            </button>
+            <span></span>
+
+  <button
+    type="button"
+    className="navigation-button"
+    onClick={() => window.print()}
+  >
+    Download PDF
+  </button>
+</div>
+          
+
+          <InvoicePreview
+            invoice={invoice}
+            totals={totals}
+          />
+
+        </div>
+      )}
+
     </main>
   );
 }
