@@ -76,6 +76,11 @@ QuickBill is an offline-first invoice editor built using React and Vite. The goa
 - Kept client data separate from invoice data.
 - Works offline without a backend or database.
 
+### 8. Sample Client Backup
+
+- Added a sample generated JSON backup file in the public folder.
+- Provides an example of the QuickBill client backup structure.
+
 ## Remaining Work
 
 ### 1. Android Mobile App
