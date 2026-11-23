@@ -113,6 +113,15 @@ function InvoiceEditor({
         </label>
       </Section>
 
+        {/* Editable Buyer Details */}
+      <Section title="Customer Details">
+        {renderField('customer', 'name', 'Customer Name', invoice.customer.name)}
+        {renderField('customer', 'phone', 'Phone', invoice.customer.phone)}
+        {renderField('customer', 'gstNumber', 'GST Number', invoice.customer.gstNumber)}
+        {renderField('customer', 'addressLine1', 'Address Line 1', invoice.customer.addressLine1)}
+        {renderField('customer', 'addressLine2', 'Address Line 2', invoice.customer.addressLine2)}
+      </Section>
+
       {/* Locked Seller Details (configured as readOnly: true in InvoiceConfig.js) */}
       <Section title="Seller Details">
         {renderField('seller', 'name', 'Company Name', invoice.seller.name)}
@@ -121,15 +130,6 @@ function InvoiceEditor({
         {renderField('seller', 'phone', 'Phone', invoice.seller.phone)}
         {renderField('seller', 'addressLine1', 'Address Line 1', invoice.seller.addressLine1)}
         {renderField('seller', 'addressLine2', 'Address Line 2', invoice.seller.addressLine2)}
-      </Section>
-
-      {/* Editable Buyer Details */}
-      <Section title="Customer Details">
-        {renderField('customer', 'name', 'Customer Name', invoice.customer.name)}
-        {renderField('customer', 'phone', 'Phone', invoice.customer.phone)}
-        {renderField('customer', 'gstNumber', 'GST Number', invoice.customer.gstNumber)}
-        {renderField('customer', 'addressLine1', 'Address Line 1', invoice.customer.addressLine1)}
-        {renderField('customer', 'addressLine2', 'Address Line 2', invoice.customer.addressLine2)}
       </Section>
 
       {/* Logistics & E-Way Bill Details */}
