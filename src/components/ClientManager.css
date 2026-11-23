@@ -1,0 +1,132 @@
+.client-manager {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.client-manager h3 {
+  margin: 0 0 14px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background-color: var(--color-bg-light);
+  border: 1px solid var(--border-color);
+}
+
+.client-select-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 420px;
+  margin: 0 4px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-black);
+}
+
+.client-select-label select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--color-black);
+  background-color: var(--color-white);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.client-select-label select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(32, 55, 100, 0.15);
+}
+
+.client-manager-actions,
+.client-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 4px 0;
+}
+
+.client-manager button {
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.client-manager button:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+
+.client-manager button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.client-manager button.danger-button {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
+  border: 1px solid var(--color-danger-text);
+}
+
+.client-manager button.danger-button:hover:not(:disabled) {
+  background-color: var(--color-danger-text);
+  color: var(--color-white);
+}
+
+.client-manager-message {
+  margin: 12px 4px 0;
+  padding: 8px 10px;
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  font-size: 13px;
+  color: var(--color-primary);
+}
+
+@media (max-width: 600px) {
+  .client-manager {
+    padding: 8px;
+  }
+
+  .client-select-label,
+  .client-manager-actions,
+  .client-backup-actions,
+  .client-manager-message {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .client-select-label {
+    max-width: none;
+  }
+
+  .client-manager-actions,
+  .client-backup-actions {
+    flex-direction: column;
+  }
+
+  .client-manager button {
+    width: 100%;
+  }
+}
