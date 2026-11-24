@@ -6,6 +6,17 @@ import {
     parseClientsBackup,
 } from '../ClientStorage.js';
 
+// import {
+//     Directory,
+//     Encoding,
+//     Filesystem,
+// } from '@capacitor/filesystem';
+// import { Share } from '@capacitor/share';
+
+import { Capacitor, registerPlugin } from '@capacitor/core';
+
+const NativeFileSaver = registerPlugin('NativeFileSaver');
+
 function ClientManager({
     clients,
     selectedClientId,
@@ -22,43 +33,117 @@ function ClientManager({
         client => client.id === selectedClientId
     );
 
-    const handleBackup = () => {
-        const backup = {
-            app: 'QuickBill',
-            version: 1,
-            clients,
-        };
+    //     const handleBackup = () => {
+    //         const backup = {
+    //             app: 'QuickBill',
+    //             version: 1,
+    //             clients,
+    //         };
 
-        const blob = new Blob(
-            [JSON.stringify(backup, null, 2)],
-            { type: 'application/json' }
-        );
+    //         const blob = new Blob(
+    //             [JSON.stringify(backup, null, 2)],
+    //             { type: 'application/json' }
+    //         );
 
-        
-        const now = new Date();
-  const pad = (n) => String(n).padStart(2, '0');
 
-  const timestamp = [
-    now.getFullYear(),
-    pad(now.getMonth() + 1),
-    pad(now.getDate()),
-  ].join('-') + '_' + [
-    pad(now.getHours()),
-    pad(now.getMinutes()),
-    pad(now.getSeconds()),
-  ].join('-');
+    //         const now = new Date();
+    //   const pad = (n) => String(n).padStart(2, '0');
 
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-        link.href = url;
-        link.download = `quickbill-clients-backup-${timestamp}.json`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+    //   const timestamp = [
+    //     now.getFullYear(),
+    //     pad(now.getMonth() + 1),
+    //     pad(now.getDate()),
+    //   ].join('-') + '_' + [
+    //     pad(now.getHours()),
+    //     pad(now.getMinutes()),
+    //     pad(now.getSeconds()),
+    //   ].join('-');
 
-        URL.revokeObjectURL(url);
-        setMessage('Backup file created.');
+    //   const url = URL.createObjectURL(blob);
+    //   const link = document.createElement('a');
+    //         link.href = url;
+    //         link.download = `quickbill-clients-backup-${timestamp}.json`;
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         link.remove();
+
+    //         URL.revokeObjectURL(url);
+    //         setMessage('Backup file created.');
+    //     };
+
+
+    const handleBackup = async () => {
+        try {
+            const backup = {
+                app: 'QuickBill',
+                version: 1,
+                clients,
+            };
+
+            const backupText = JSON.stringify(backup, null, 2);
+
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+
+            const timestamp = [
+                now.getFullYear(),
+                pad(now.getMonth() + 1),
+                pad(now.getDate()),
+            ].join('-') + '_' + [
+                pad(now.getHours()),
+                pad(now.getMinutes()),
+                pad(now.getSeconds()),
+            ].join('-');
+
+            const fileName =
+                `quickbill-clients-backup-${timestamp}.json`;
+
+            if (Capacitor.getPlatform() === 'android') {
+                const result = await NativeFileSaver.saveJson({
+                    fileName,
+                    content: backupText,
+                });
+
+                if (result.cancelled) {
+                    setMessage('Backup cancelled.');
+                    return;
+                }
+
+                if (result.saved) {
+                    setMessage('Backup saved successfully.');
+                    return;
+                }
+
+                throw new Error('Backup could not be saved.');
+            }
+
+            // Desktop browser fallback
+            const blob = new Blob(
+                [backupText],
+                { type: 'application/json' }
+            );
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = fileName;
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+            setMessage('Backup download started.');
+
+        } catch (error) {
+            console.error('Backup failed:', error);
+            setMessage(error.message || 'Could not save backup.');
+        }
     };
+
+
 
     const handleRestore = async (event) => {
         const file = event.target.files?.[0];

@@ -63,6 +63,8 @@ QuickBill is an offline-first invoice editor built using React and Vite. The goa
 - Preserved invoice table borders, backgrounds and signature.
 - Supports offline PDF generation using the browser's Save as PDF option.
 
+Note: Android PDF generation and saving still require implementation and testing.
+
 ### 7. Client Management
 
 - Added client management functionality.
@@ -100,13 +102,17 @@ QuickBill is an offline-first invoice editor built using React and Vite. The goa
 
 ## Technology Stack
 
-- React
-- Vite
-- JavaScript
-- CSS
-- localStorage (client data)
-- Capacitor (planned for Android)
+| Technology | Purpose |
+|---|---|
+| React | User interface |
+| Vite | Development and build tool |
+| JavaScript | Application logic |
+| CSS | Styling and responsive layouts |
+| localStorage | Local client data storage |
+| Capacitor 8 | Android integration |
+| Java | Native Android file-saving plugin |
+| Android Storage Access Framework | User-selected file saving |
 
 ## Development Principle
 
-QuickBill is being developed as an offline-first application. Invoice and client data should remain on the user's device, and core invoice features should not depend on an internet connection.
+QuickBill is being developed as an offline-first application. Invoice and client data should remain on the user's device, and core invoice features should not depend on an internet connection. 
