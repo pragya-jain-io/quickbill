@@ -26,6 +26,10 @@ import {
 
 import ClientManager from './components/ClientManager';
 
+import { Capacitor, registerPlugin } from '@capacitor/core';
+
+const NativeFileSaver = registerPlugin('NativeFileSaver');
+
 
 function App() {
   // Invoice data remains in App so it survives page switching.
@@ -213,6 +217,94 @@ function App() {
     });
   };
 
+  const formatDateDDMMYYYY = (dateInput) => {
+    if (!dateInput) {
+      const date = new Date();
+
+      const pad = (n) => String(n).padStart(2, '0');
+
+      return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
+    }
+
+    // Handle YYYY-MM-DD without timezone conversion.
+    const dateString = String(dateInput).trim();
+
+    const match = dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+    if (match) {
+      return `${match[3]}-${match[2]}-${match[1]}`;
+    }
+
+    const date = new Date(dateInput);
+
+    if (Number.isNaN(date.getTime())) {
+      return '00-00-0000';
+    }
+
+    const pad = (n) => String(n).padStart(2, '0');
+
+    return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
+  };
+
+  const getFirstTwoWords = (name = '') => {
+    const words = String(name)
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2);
+
+    return words.join('_') || 'Client';
+  };
+
+  const sanitizeFileName = (value) => {
+    return String(value)
+      .replace(/[<>:"/\\|?*\x00-\x1F]/g, '')
+      .replace(/\s+/g, '_')
+      .replace(/_+/g, '_')
+      .replace(/[. ]+$/g, '')
+      .slice(0, 100) || 'Invoice';
+  };
+
+  const handleDownloadPdf = async () => {
+    const clientWords = getFirstTwoWords(
+      invoice.customer?.name
+    );
+
+    const invoiceNo = sanitizeFileName(
+      invoice.invoiceNumber || 'Invoice'
+    );
+
+    const formattedDate = formatDateDDMMYYYY(
+      invoice.invoiceDate || invoice.date
+    );
+
+    const fileName = sanitizeFileName(
+      `${clientWords}_${invoiceNo}_${formattedDate}`
+    );
+
+    if (Capacitor.getPlatform() === 'android') {
+      try {
+        await NativeFileSaver.printInvoice({
+          jobName: fileName,
+        });
+      } catch (error) {
+        console.error('PDF generation failed:', error);
+        alert('Could not open the Android print dialog.');
+      }
+
+      return;
+    }
+
+    // Desktop browser: use the filename as the document title.
+    const previousTitle = document.title;
+
+    document.title = fileName;
+
+    window.print();
+
+    document.title = previousTitle;
+  };
+
   return (
     <main className="app-container">
 
@@ -273,7 +365,7 @@ function App() {
             <button
               type="button"
               className="navigation-button"
-              onClick={() => window.print()}
+              onClick={handleDownloadPdf}
             >
               Download PDF
             </button>
